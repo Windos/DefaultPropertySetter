@@ -15,6 +15,7 @@ function Set-DefaultPropertySet {
 
         [Switch] $Force
     )
+    Begin {
         $DefaultDisplaySet = $DisplaySet
         $DefaultDisplayPropertySet = New-Object System.Management.Automation.PSPropertySet(‘DefaultDisplayPropertySet’,[string[]]$DefaultDisplaySet)
         $PSStandardMembers = [System.Management.Automation.PSMemberInfo[]]@($DefaultDisplayPropertySet)
