@@ -5,8 +5,7 @@ function Set-DefaultPropertySet {
     Param (
         # Parameter help description
         [Parameter(Mandatory,
-                   ValueFromPipeline,
-                   ValueFromPipelineByPropertyName)]
+                   ValueFromPipeline)]
         [PSCustomObject[]] $Object,
 
         # Parameter help description
