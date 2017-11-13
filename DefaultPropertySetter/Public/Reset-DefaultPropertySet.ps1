@@ -1,6 +1,6 @@
 # Sets a resource back to its original state.
 
-function Get-DefaultPropertySet {
+function Reset-DefaultPropertySet {
     [CmdletBinding()]
     param (
         # comment based parameter help
@@ -13,9 +13,7 @@ function Get-DefaultPropertySet {
 
     Process {
         foreach ($Obj in $Object) {
-            [PSCustomObject] @{
-                DisplaySet = $Obj.PSStandardMembers.DefaultDisplayPropertySet.ReferencedPropertyNames
-            }
+            $Obj.PSStandardMembers.DefaultDisplayPropertySet.ReferencedPropertyNames.Clear()
         }
     }
 
