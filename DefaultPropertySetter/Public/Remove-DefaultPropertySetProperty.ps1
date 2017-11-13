@@ -1,0 +1,1 @@
+# $DemoObject1.PSStandardMembers.DefaultDisplayPropertySet.ReferencedPropertyNames.Remove('Country')
