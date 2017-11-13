@@ -15,6 +15,7 @@ function Set-DefaultPropertySet {
 
         [Switch] $Force
     )
+
     Begin {
         $DefaultDisplaySet = $DisplaySet
         $DefaultDisplayPropertySet = New-Object System.Management.Automation.PSPropertySet(‘DefaultDisplayPropertySet’,[string[]]$DefaultDisplaySet)
@@ -29,11 +30,10 @@ function Set-DefaultPropertySet {
                 try {
                     $Obj | Add-Member MemberSet PSStandardMembers $PSStandardMembers -ErrorAction Stop
                 } catch [InvalidOperationException] {
-                    Write-Error -Exception 'Cannot set a Default Property Set on () because a Default Property Set already exists. To overwrite the Property Set, add the Force parameter to your command.'
+                    Write-Error -Exception 'Cannot set a Default Property Set on one or more object because a Default Property Set already exists. To overwrite the Property Set, add the Force parameter to your command.'
                     Continue
                 }
             }
-            $Obj
         }
     }
 
