@@ -1,10 +1,10 @@
-function Get-DefaultPropertySet {
+function Clear-DefaultPropertySet {
     <#
     .SYNOPSIS
-    Gets all Properties from the Default Display Property Set of an Object.
+    Removes all Properties from the Default Display Property Set of an Object.
 
     .DESCRIPTION
-    The Get-DefaultPropertySet function gets all Properties from the Default
+    The Clear-DefaultPropertySet function removes all Properties from the Default
     Display Property Set of a PSCustomObject or collection of PSCustomObjects.
 
     .PARAMETER Object
@@ -28,9 +28,7 @@ function Get-DefaultPropertySet {
 
     Process {
         foreach ($Obj in $Object) {
-            [PSCustomObject] @{
-                DisplaySet = $Obj.PSStandardMembers.DefaultDisplayPropertySet.ReferencedPropertyNames
-            }
+            $Obj.PSStandardMembers.DefaultDisplayPropertySet.ReferencedPropertyNames.Clear()
         }
     }
 

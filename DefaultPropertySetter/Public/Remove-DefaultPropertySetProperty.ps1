@@ -1,9 +1,27 @@
-# $DemoObject1.PSStandardMembers.DefaultDisplayPropertySet.ReferencedPropertyNames.Remove('Country')
-
 function Remove-DefaultPropertySetProperty {
+    <#
+    .SYNOPSIS
+    Removes Properties from the Default Display Property Set of an Object.
+
+    .DESCRIPTION
+    The Remove-DefaultPropertySetProperty function removes Properties from the
+    Default Display Property Set of a PSCustomObject or collection of PSCustomObjects.
+
+    .PARAMETER Object
+    PSCustomObject(s) with an existing Default Display Property Set.
+
+    .PARAMETER Property
+    The name of the properties to be removed from the Default Display Property Set.
+
+    .EXAMPLE
+    An example
+
+    .LINK
+    https://github.com/Windos/DefaultPropertySetter
+    #>
+
     [CmdletBinding()]
     param (
-        # comment based parameter help
         [Parameter(Mandatory,
                    ValueFromPipeline)]
         [PSCustomObject[]] $Object,
