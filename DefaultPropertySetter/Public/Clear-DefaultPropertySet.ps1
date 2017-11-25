@@ -11,7 +11,16 @@ function Clear-DefaultPropertySet {
     PSCustomObject(s) with an existing Default Display Property Set.
 
     .EXAMPLE
-    An example
+    Clear-DefaultPropertySet -Object $DemoObject1
+
+    This command clears the properties from $DemoObject1's Default Display
+    Property Set.
+
+    .EXAMPLE
+    $DemoObject1, $DemoObject2 | Clear-DefaultPropertySet
+
+    This command clears the properties from both $DemoObject1 and $DemoObject2's
+    Default Display Property Set.
 
     .LINK
     https://github.com/Windos/DefaultPropertySetter
