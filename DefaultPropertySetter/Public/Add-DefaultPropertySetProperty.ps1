@@ -18,7 +18,22 @@ function Add-DefaultPropertySetProperty {
     The name of the properties to be added to the Default Display Property Set.
 
     .EXAMPLE
-    An example
+    Add-DefaultPropertySetProperty -Object $DemoObject1 -Property 'Name', 'Date'
+
+    This command adds the properties 'Name' and 'Date' to $DemoObject1's Default
+    Display Property Set.
+
+    Note that $DemoObject1 should already have a Default Display Property Set,
+    otherwise this function will generate an error.
+
+    .EXAMPLE
+    $DemoObject1, $DemoObject2 | Add-DefaultPropertySetProperty -Property 'Date'
+
+    This command takes two objects as input from the pipeline and adds the property
+    'Date' to both of their Default Display Property Sets.
+
+    Note that $DemoObject1 should already have a Default Display Property Set,
+    otherwise this function will generate an error.
 
     .LINK
     https://github.com/Windos/DefaultPropertySetter
@@ -45,7 +60,7 @@ function Add-DefaultPropertySetProperty {
             } else {
                 $ErrorMsg = 'Cannot add Properties as a Default Display Property Set does not exist on the Object. '
                 $ErrorMsg += 'Please run the Set-DefaultPropertySet function instead.'
-                Write-Error -Message $ErrorMsg -Category InvalidOperation
+                throw $ErrorMsg
             }
         }
     }
