@@ -38,8 +38,14 @@ function Add-DefaultPropertySetProperty {
 
     Process {
         foreach ($Obj in $Object) {
-            foreach ($Prop in $Property) {
-                $Obj.PSStandardMembers.DefaultDisplayPropertySet.ReferencedPropertyNames.Add($Prop)
+            if ($Obj.PSStandardMembers) {
+                foreach ($Prop in $Property) {
+                    $Obj.PSStandardMembers.DefaultDisplayPropertySet.ReferencedPropertyNames.Add($Prop)
+                }
+            } else {
+                $ErrorMsg = 'Cannot add Properties as a Default Display Property Set does not exist on the Object. '
+                $ErrorMsg += 'Please run the Set-DefaultPropertySet function instead.'
+                Write-Error -Message $ErrorMsg -Category InvalidOperation
             }
         }
     }
