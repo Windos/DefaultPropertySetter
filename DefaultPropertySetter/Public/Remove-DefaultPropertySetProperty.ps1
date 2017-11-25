@@ -14,7 +14,16 @@ function Remove-DefaultPropertySetProperty {
     The name of the properties to be removed from the Default Display Property Set.
 
     .EXAMPLE
-    An example
+    Remove-DefaultPropertySetProperty -Object $DemoObject1 -Property 'Name', 'Date'
+
+    This command removes the properties 'Name' and 'Date' from $DemoObject1's Default
+    Display Property Set.
+
+    .EXAMPLE
+    $DemoObject1, $DemoObject2 | Remove-DefaultPropertySetProperty -Property 'Date'
+
+    This command takes two objects as input from the pipeline and removes the property
+    'Date' from both of their Default Display Property Sets.
 
     .LINK
     https://github.com/Windos/DefaultPropertySetter
