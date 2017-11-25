@@ -129,3 +129,52 @@ Describe 'Clear-DefaultPropertySet' {
         }
     }
 }
+
+Describe 'Get-DefaultPropertySet' {
+    $DemoObject1 = [PSCustomObject] @{
+        Name = 'Demo 1'
+        Time = Get-Date -DisplayHint Time
+        Date = Get-Date -DisplayHint Date
+        Country = 'NZ'
+        PC = 'Desktop'
+    }
+
+    $DemoObject2 = [PSCustomObject] @{
+        Name = 'Demo 2'
+        Time = Get-Date -DisplayHint Time
+        Date = Get-Date -DisplayHint Date
+        Country = 'US'
+        PC = 'Laptop'
+    }
+
+    $defaultDisplaySet = 'Name', 'Date', 'PC'
+    $defaultDisplayPropertySet = New-Object System.Management.Automation.PSPropertySet('DefaultDisplayPropertySet',[string[]]$defaultDisplaySet)
+    $PSStandardMembers = [System.Management.Automation.PSMemberInfo[]]@($defaultDisplayPropertySet)
+
+    $DemoObject1 | Add-Member MemberSet PSStandardMembers $PSStandardMembers
+    $DemoObject2 | Add-Member MemberSet PSStandardMembers $PSStandardMembers
+
+    Context 'Object supplied as an argument' {
+        It 'should not throw an error' {
+            { Get-DefaultPropertySet -Object $DemoObject1 } | Should Not Throw
+        }
+        It 'should return 1 object' {
+            @(Get-DefaultPropertySet -Object $DemoObject1).Length | Should Be 1
+        }
+        It 'should return 3 referenced properties' {
+            @((Get-DefaultPropertySet -Object $DemoObject1).DisplaySet).Length | Should Be 3
+        }
+    }
+
+    Context 'Object supplied via pipeline' {
+        It 'should not throw an error' {
+            { $DemoObject1, $DemoObject2 | Get-DefaultPropertySet } | Should Not Throw
+        }
+        It 'should return 2 object' {
+            @($DemoObject1, $DemoObject2 | Get-DefaultPropertySet).Length | Should Be 2
+        }
+        It 'should return 6 referenced properties' {
+            @(($DemoObject1, $DemoObject2 | Get-DefaultPropertySet).DisplaySet).Length | Should Be 6
+        }
+    }
+}

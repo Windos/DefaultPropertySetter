@@ -11,7 +11,16 @@ function Get-DefaultPropertySet {
     PSCustomObject(s) with an existing Default Display Property Set.
 
     .EXAMPLE
-    An example
+    Get-DefaultPropertySet -Object $DemoObject1
+
+    This example lists the properties included in $DemoObject1's Default Display
+    Property Set.
+
+    .EXAMPLE
+    $DemoObject1, $DemoObject2 | Get-DefaultPropertySet
+
+    This example lists the properties included in both $DemoObject1 and
+    $DemoObject2's Default Display Property Set.
 
     .LINK
     https://github.com/Windos/DefaultPropertySetter
