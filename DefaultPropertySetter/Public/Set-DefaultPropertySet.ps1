@@ -23,7 +23,16 @@ function Set-DefaultPropertySet {
     Specifies that an existing Default Display Property Set can be overwritten.
 
     .EXAMPLE
-    An example
+    Set-DefaultPropertySet -Object $DemoObject1 -DisplaySet 'Name', 'Date'
+
+    This command adds a Default Display Property Set to $DemoObject1 containing
+    the properties 'Name' and 'Date'.
+
+    .EXAMPLE
+    $DemoObject1, $DemoObject2 | Set-DefaultPropertySet -DisplaySet 'Name', 'Date'
+
+    This command takes two objects as input from the pipeline and adds a Default
+    Display Property Set to both objects containing the properties 'Name' and 'Date'.
 
     .LINK
     https://github.com/Windos/DefaultPropertySetter
@@ -35,25 +44,11 @@ function Set-DefaultPropertySet {
                    ValueFromPipeline)]
         [PSCustomObject[]] $Object,
 
+        [Parameter(Mandatory)]
+        [String[]] $DisplaySet,
+
         [Switch] $Force
     )
-
-    DynamicParam {
-        $ParamAttrib  = New-Object System.Management.Automation.ParameterAttribute
-        $ParamAttrib.Mandatory  = $true
-        $ParamAttrib.ParameterSetName  = '__AllParameterSets'
-        $AttribColl = New-Object  System.Collections.ObjectModel.Collection[System.Attribute]
-        $AttribColl.Add($ParamAttrib)
-
-        $AvailablePropertyNames = $MyInvocation.BoundParameters.Item('Object')[0] | Get-Member -MemberType Properties | Select -ExpandProperty Name
-        $AttribColl.Add((New-Object  System.Management.Automation.ValidateSetAttribute($AvailablePropertyNames)))
-
-        $RuntimeParam  = New-Object System.Management.Automation.RuntimeDefinedParameter('DisplaySet',  [string[]], $AttribColl)
-        $RuntimeParamDic  = New-Object System.Management.Automation.RuntimeDefinedParameterDictionary
-        $RuntimeParamDic.Add('DisplaySet',  $RuntimeParam)
-
-        return  $RuntimeParamDic
-    }
 
     Begin {
         $DefaultDisplaySet = $DisplaySet
@@ -69,7 +64,7 @@ function Set-DefaultPropertySet {
                 try {
                     $Obj | Add-Member MemberSet PSStandardMembers $PSStandardMembers -ErrorAction Stop
                 } catch [InvalidOperationException] {
-                    Write-Error -Exception 'Cannot set a Default Property Set on one or more object because a Default Property Set already exists. To overwrite the Property Set, add the Force parameter to your command.'
+                    throw 'Cannot set a Default Property Set on one or more object because a Default Property Set already exists. To overwrite the Property Set, add the Force parameter to your command.'
                     Continue
                 }
             }

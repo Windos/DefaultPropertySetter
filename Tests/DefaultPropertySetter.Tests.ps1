@@ -179,7 +179,7 @@ Describe 'Get-DefaultPropertySet' {
     }
 }
 
-Describe 'Add-DefaultPropertySetProperty' {
+Describe 'Remove-DefaultPropertySetProperty' {
     $DemoObject1 = [PSCustomObject] @{
         Name = 'Demo 1'
         Time = Get-Date -DisplayHint Time
@@ -227,6 +227,85 @@ Describe 'Add-DefaultPropertySetProperty' {
         }
         It 'should not throw an error' {
             { $DemoObject1, $DemoObject2 | Remove-DefaultPropertySetProperty -Property 'Date' } | Should Not Throw
+        }
+        It 'should result in 2 referenced properties on $DemoObject1' {
+            @($DemoObject1.PSStandardMembers.DefaultDisplayPropertySet.ReferencedPropertyNames).Length | Should Be 2
+        }
+        It 'should result in 2 referenced properties on $DemoObject2' {
+            @($DemoObject2.PSStandardMembers.DefaultDisplayPropertySet.ReferencedPropertyNames).Length | Should Be 2
+        }
+    }
+}
+
+Describe 'Set-DefaultPropertySet' {
+    $DemoObject1 = [PSCustomObject] @{
+        Name = 'Demo 1'
+        Time = Get-Date -DisplayHint Time
+        Date = Get-Date -DisplayHint Date
+        Country = 'NZ'
+        PC = 'Desktop'
+    }
+
+    $DemoObject2 = [PSCustomObject] @{
+        Name = 'Demo 2'
+        Time = Get-Date -DisplayHint Time
+        Date = Get-Date -DisplayHint Date
+        Country = 'US'
+        PC = 'Laptop'
+    }
+
+    Context 'Object supplied as an argument' {
+        It 'should start with no PSStandardMembers' {
+            $DemoObject1.PSStandardMembers -eq $null | Should be $true
+        }
+        It 'should not throw an error' {
+            { Set-DefaultPropertySet -Object $DemoObject1 -DisplaySet 'Name', 'Date' } | Should Not Throw
+        }
+        It 'should result in 2 referenced properties' {
+            @($DemoObject1.PSStandardMembers.DefaultDisplayPropertySet.ReferencedPropertyNames).Length | Should Be 2
+        }
+    }
+
+    Context 'Re-Running on object supplied as an argument' {
+        It 'should start with PSStandardMembers' {
+            $DemoObject1.PSStandardMembers -ne $null | Should be $true
+        }
+        It 'should throw an error, re-running without Force switch' {
+            { Set-DefaultPropertySet -Object $DemoObject1 -DisplaySet 'Name', 'Date', 'PC' } | Should Throw
+        }
+        It 'should now throw an error, re-running with Force switch' {
+            { Set-DefaultPropertySet -Object $DemoObject1 -DisplaySet 'Name', 'Date', 'PC' -Force } | Should Not Throw
+        }
+        It 'should result in 3 referenced properties' {
+            @($DemoObject1.PSStandardMembers.DefaultDisplayPropertySet.ReferencedPropertyNames).Length | Should Be 3
+        }
+    }
+
+    $DemoObject1 = [PSCustomObject] @{
+        Name = 'Demo 1'
+        Time = Get-Date -DisplayHint Time
+        Date = Get-Date -DisplayHint Date
+        Country = 'NZ'
+        PC = 'Desktop'
+    }
+
+    $DemoObject2 = [PSCustomObject] @{
+        Name = 'Demo 2'
+        Time = Get-Date -DisplayHint Time
+        Date = Get-Date -DisplayHint Date
+        Country = 'US'
+        PC = 'Laptop'
+    }
+
+    Context 'Object supplied via pipeline' {
+        It 'should start with no PSStandardMembers on $DemoObject1' {
+            $DemoObject1.PSStandardMembers -eq $null | Should be $true
+        }
+        It 'should start with no PSStandardMembers on $DemoObject2' {
+            $DemoObject2.PSStandardMembers -eq $null | Should be $true
+        }
+        It 'should not throw an error' {
+            { $DemoObject1, $DemoObject2 | Set-DefaultPropertySet -DisplaySet 'Name', 'Date' } | Should Not Throw
         }
         It 'should result in 2 referenced properties on $DemoObject1' {
             @($DemoObject1.PSStandardMembers.DefaultDisplayPropertySet.ReferencedPropertyNames).Length | Should Be 2
